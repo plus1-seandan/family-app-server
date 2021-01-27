@@ -3,24 +3,33 @@ const cors = require("cors");
 const { ApolloServer } = require("apollo-server-express");
 require("dotenv").config();
 
+const db = require("./models/db");
+const models = require("./models");
+const UserResolvere = require("./graphql/resolvers/User");
+const schema = require("./graphql");
+const { buildSchema } = require("graphql");
+const BookResolver = require("./graphql/resolvers/Book");
+
 const main = async () => {
   //set db connection
+  //sync database
+  await db.sync({
+    models,
+    // force: true
+  }); //force syncs database for development
 
   const app = express();
   app.use(cors());
 
   const apolloServer = new ApolloServer({
-    // schema: await buildSchema({
-    //   resolvers: [HelloResolver, PostResolver, UserResolver],
-    //   validate: false,
-    // }),
-    // context: ({ req, res }) => ({
-    //   req,
-    //   res,
-    //   redis,
-    //   userLoader: createUserLoader(),
-    //   updootLoader: createUpdootLoader(),
-    // }),
+    schema,
+    context: ({ req, res }) => ({
+      // req,
+      // res,
+      // redis,
+      // userLoader: createUserLoader(),
+      // updootLoader: createUpdootLoader(),
+    }),
   });
 
   apolloServer.applyMiddleware({
