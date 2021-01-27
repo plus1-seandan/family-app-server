@@ -3,6 +3,7 @@ const cors = require("cors");
 const { ApolloServer } = require("apollo-server-express");
 const passport = require("passport");
 const bodyParser = require("body-parser");
+const { verify } = require("jsonwebtoken");
 
 require("dotenv").config();
 
@@ -21,12 +22,22 @@ const main = async () => {
   }); //force syncs database for development
 
   const app = express();
+  //add express middleware
   app.use(cors());
   app.use(passport.initialize());
   setupPassport(passport);
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-
+  app.use((req, _, next) => {
+    const token = req.token;
+    try {
+      const data = verify(token, process.env.SECRET_KEY);
+      req.userId = data.userId;
+    } catch (e) {
+      console.log("NOT LOGGED IN ");
+    }
+    next();
+  });
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }) => ({

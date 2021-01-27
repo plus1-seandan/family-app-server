@@ -14,17 +14,17 @@ const UserType = gql`
   }
   type LoginResponse {
     ok: Boolean!
+    user: User
     token: String
-    refreshToken: String
     errors: [Error!]
   }
 
-  # extend type Query {
-  #   # me: User!
-  #   # allUsers: [User!]!
-  #   # hi: String!
-  #   # getUser(userId: Int!): User
-  # }
+  extend type Query {
+    me: User!
+    # allUsers: [User!]!
+    # hi: String!
+    # getUser(userId: Int!): User
+  }
   extend type Mutation {
     register(
       username: String!
@@ -34,7 +34,7 @@ const UserType = gql`
       lastName: String!
       dateOfBirth: String!
     ): RegisterResponse!
-    # login(email: String!, password: String!): LoginResponse
+    login(email: String!, password: String!): LoginResponse
   }
 `;
 
