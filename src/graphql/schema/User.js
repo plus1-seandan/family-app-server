@@ -25,14 +25,14 @@ const UserType = gql`
   #     hi: String!
   #     getUser(userId: Int!): User
   #   }
-  #   type Mutation {
-  #     register(
-  #       username: String!
-  #       email: String!
-  #       password: String!
-  #     ): RegisterResponse!
-  #     login(email: String!, password: String!): LoginResponse
-  #   }
+  type Mutation {
+    register(
+      username: String!
+      email: String!
+      password: String!
+    ): RegisterResponse!
+    login(email: String!, password: String!): LoginResponse
+  }
 `;
 
 module.exports = UserType;
