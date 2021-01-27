@@ -18,10 +18,7 @@
     "graphql": "^15.5.0",
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
-<<<<<<< HEAD
     "jsonwebtoken": "^8.5.1",
-=======
->>>>>>> 5f56498b5aa4e5870a2c0beba6205477036deea8
     "lodash": "^4.17.20",
     "morgan": "~1.9.1",
     "passport": "^0.4.1",

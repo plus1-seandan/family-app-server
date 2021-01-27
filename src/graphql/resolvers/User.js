@@ -21,7 +21,6 @@ const UserResolver = {
       if (!req.userId) {
         return null;
       }
-
       const me = await models.User.findOne(
         { where: { id: req.userId } },
         { raw: true }
