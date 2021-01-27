@@ -9,6 +9,9 @@ require("dotenv").config();
 const db = require("./models/db");
 const models = require("./models");
 const schema = require("./graphql");
+
+const { buildSchema } = require("graphql");
+const BookResolver = require("./graphql/resolvers/Book");
 const setupPassport = require("./config/passport");
 
 const main = async () => {
@@ -32,6 +35,7 @@ const main = async () => {
       models,
       req,
       res,
+
       // redis,
       // userLoader: createUserLoader(),
       // updootLoader: createUpdootLoader(),

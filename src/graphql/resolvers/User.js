@@ -36,7 +36,8 @@ const UserResolver = {
         console.log(err);
         return {
           ok: false,
-          errors: formatErrors(err),
+
+          errors: [{ path: "somepath", message: "some error mesage" }],
         };
       }
     },
