@@ -6,6 +6,8 @@
 // import db from "../../models/db";
 // import { QueryTypes } from "sequelize";
 
+const formatErrors = require("../../utils/formatErrors");
+
 const UserResolver = {
   Query: {
     // allUsers: (parent, args, { models }) => models.User.findAll(),
@@ -21,7 +23,7 @@ const UserResolver = {
     //   models.User.findOne({ where: { id: userId } }),
   },
   Mutation: {
-    // login: (parent, { email, password }, { models, SECRET, SECRET2 }) =>
+    // login: (parent, { email, password }, { models, req, res }) =>
     //   tryLogin(email, password, models, SECRET, SECRET2),
     register: async (parent, args, { models }) => {
       try {
@@ -34,7 +36,7 @@ const UserResolver = {
         console.log(err);
         return {
           ok: false,
-          errors: [{ path: "somepath", message: "some error mesage" }],
+          errors: formatErrors(err),
         };
       }
     },

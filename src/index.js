@@ -8,10 +8,7 @@ require("dotenv").config();
 
 const db = require("./models/db");
 const models = require("./models");
-const UserResolvere = require("./graphql/resolvers/User");
 const schema = require("./graphql");
-const { buildSchema } = require("graphql");
-const BookResolver = require("./graphql/resolvers/Book");
 const setupPassport = require("./config/passport");
 
 const main = async () => {
@@ -19,7 +16,7 @@ const main = async () => {
   //sync database
   await db.sync({
     models,
-    // force: true
+    force: true,
   }); //force syncs database for development
 
   const app = express();
@@ -33,8 +30,8 @@ const main = async () => {
     schema,
     context: ({ req, res }) => ({
       models,
-      // req,
-      // res,
+      req,
+      res,
       // redis,
       // userLoader: createUserLoader(),
       // updootLoader: createUpdootLoader(),

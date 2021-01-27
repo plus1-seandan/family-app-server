@@ -39,10 +39,10 @@ User.addHook("beforeValidate", async (user) => {
 });
 
 User.associate = (models) => {
-  //   User.belongsToMany(models.Team, {
-  //     through: models.Member,
-  //     foreignKey: "userId",
-  //   });
+  User.belongsToMany(models.Project, {
+    through: models.Member,
+    foreignKey: "userId",
+  });
   //   User.belongsToMany(models.Channel, {
   //     through: "channelMember",
   //     foreignKey: "userId",
