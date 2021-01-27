@@ -28,6 +28,15 @@ const User = db.define("user", {
       },
     },
   },
+  firstName: {
+    type: Sequelize.STRING,
+  },
+  lastName: {
+    type: Sequelize.STRING,
+  },
+  dateOfBirth: {
+    type: Sequelize.DATE,
+  },
   password: {
     type: Sequelize.STRING,
   },
@@ -37,16 +46,21 @@ User.addHook("beforeValidate", async (user) => {
   const hashedPassword = await bcrypt.hash(user.password, 12);
   user.password = hashedPassword;
 });
-
 User.associate = (models) => {
-  //   User.belongsToMany(models.Team, {
-  //     through: models.Member,
-  //     foreignKey: "userId",
-  //   });
-  //   User.belongsToMany(models.Channel, {
-  //     through: "channelMember",
-  //     foreignKey: "userId",
-  //   });
+  User.belongsToMany(models.Group, {
+    through: models.Member,
+    foreignKey: "userId",
+  });
+  User.belongsToMany(models.User, {
+    through: models.Relationship,
+    as: "Me",
+    foreignKey: "me",
+  });
+  User.belongsToMany(models.User, {
+    through: models.Relationship,
+    as: "You",
+    foreignKey: "you",
+  });
 };
 
 module.exports = User;

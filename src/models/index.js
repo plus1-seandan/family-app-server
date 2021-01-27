@@ -1,11 +1,17 @@
 const Sequelize = require("sequelize");
 
 const User = require("./user");
+const Member = require("./Member");
+const Group = require("./group");
+const Relationship = require("./relationship");
 
 const db = require("./db");
 
 const models = {
   User,
+  Member,
+  Group,
+  Relationship,
 };
 
 //if a model has associate attribute, create the associations
