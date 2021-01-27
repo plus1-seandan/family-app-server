@@ -19,19 +19,19 @@ const UserType = gql`
     errors: [Error!]
   }
 
-  #   type Query {
-  #     me: User!
-  #     allUsers: [User!]!
-  #     hi: String!
-  #     getUser(userId: Int!): User
-  #   }
-  type Mutation {
+  # extend type Query {
+  #   # me: User!
+  #   # allUsers: [User!]!
+  #   # hi: String!
+  #   # getUser(userId: Int!): User
+  # }
+  extend type Mutation {
     register(
       username: String!
       email: String!
       password: String!
     ): RegisterResponse!
-    login(email: String!, password: String!): LoginResponse
+    # login(email: String!, password: String!): LoginResponse
   }
 `;
 

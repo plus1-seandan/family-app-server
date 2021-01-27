@@ -19,8 +19,6 @@ const UserResolver = {
     //   );
     //   return me;
     // }),
-    // getUser: (parent, { userId }, { models }) =>
-    //   models.User.findOne({ where: { id: userId } }),
   },
   Mutation: {
     // login: (parent, { email, password }, { models, req, res }) =>
