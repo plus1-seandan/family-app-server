@@ -12,6 +12,8 @@ const { sign } = require("jsonwebtoken");
 const formatErrors = require("../../utils/formatErrors");
 require("dotenv").config();
 
+const formatErrors = require("../../utils/formatErrors");
+
 const UserResolver = {
   Query: {
     // allUsers: (parent, args, { models }) => models.User.findAll(),
