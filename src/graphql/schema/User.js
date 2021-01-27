@@ -30,6 +30,9 @@ const UserType = gql`
       username: String!
       email: String!
       password: String!
+      firstName: String!
+      lastName: String!
+      dateOfBirth: String!
     ): RegisterResponse!
     # login(email: String!, password: String!): LoginResponse
   }

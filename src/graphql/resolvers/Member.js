@@ -1,3 +1,4 @@
+const formatErrors = require("../../utils/formatErrors");
 const { getUser } = require("../../utils/user");
 
 const MemberResolver = {
@@ -18,12 +19,22 @@ const MemberResolver = {
         const member = await models.Member.create({
           groupId: args.groupId,
           userId: args.userId,
-          user: getUser(args.userId),
         });
-        return member;
+        console.log({ member: member.dataValues });
+        const res = {
+          ok: true,
+          member: {
+            ...member.dataValues,
+            user: await getUser(args.userId),
+          },
+        };
+        return res;
       } catch (err) {
         console.log(err);
-        return false;
+        return {
+          ok: false,
+          errors: formatErrors(err),
+        };
       }
     },
   },

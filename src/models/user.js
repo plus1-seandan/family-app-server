@@ -28,6 +28,15 @@ const User = db.define("user", {
       },
     },
   },
+  firstName: {
+    type: Sequelize.STRING,
+  },
+  lastName: {
+    type: Sequelize.STRING,
+  },
+  dateOfBirth: {
+    type: Sequelize.DATE,
+  },
   password: {
     type: Sequelize.STRING,
   },

@@ -17,6 +17,7 @@ const main = async () => {
   await db.sync({
     models,
     // force: true,
+    alter: true,
   }); //force syncs database for development
 
   const app = express();
