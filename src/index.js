@@ -1,6 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const { ApolloServer } = require("apollo-server-express");
+const passport = require("passport");
+const bodyParser = require("body-parser");
+
 require("dotenv").config();
 
 const db = require("./models/db");
@@ -9,6 +12,7 @@ const UserResolvere = require("./graphql/resolvers/User");
 const schema = require("./graphql");
 const { buildSchema } = require("graphql");
 const BookResolver = require("./graphql/resolvers/Book");
+const setupPassport = require("./config/passport");
 
 const main = async () => {
   //set db connection
@@ -20,10 +24,15 @@ const main = async () => {
 
   const app = express();
   app.use(cors());
+  app.use(passport.initialize());
+  setupPassport(passport);
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   const apolloServer = new ApolloServer({
     schema,
     context: ({ req, res }) => ({
+      models,
       // req,
       // res,
       // redis,
