@@ -16,6 +16,7 @@ Group.associate = (models) => {
   });
   Group.hasMany(models.Event);
   Group.hasMany(models.Album);
+  Group.hasMany(models.Message);
 };
 
 module.exports = Group;

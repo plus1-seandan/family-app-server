@@ -64,6 +64,7 @@ User.associate = (models) => {
     as: "You",
     foreignKey: "you",
   });
+  User.hasMany(models.Message);
 };
 
 module.exports = User;

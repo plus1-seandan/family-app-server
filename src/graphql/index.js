@@ -17,6 +17,8 @@ const PhotoType = require("./schema/Photo");
 const FileResolver = require("./resolvers/File");
 const FileType = require("./schema/File");
 const PhotoResolver = require("./resolvers/Photo");
+const MessageType = require("./schema/Message");
+const MessageResolver = require("./resolvers/Message");
 
 const schema = makeExecutableSchema({
   typeDefs: [
@@ -29,6 +31,7 @@ const schema = makeExecutableSchema({
     AlbumType,
     PhotoType,
     FileType,
+    MessageType,
   ],
   resolvers: [
     BookResolver,
@@ -39,6 +42,7 @@ const schema = makeExecutableSchema({
     AlbumResolver,
     FileResolver,
     PhotoResolver,
+    MessageResolver,
   ],
 });
 

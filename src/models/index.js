@@ -7,6 +7,7 @@ const Relationship = require("./relationship");
 const Event = require("./Event");
 const Album = require("./Album");
 const Photo = require("./Photo");
+const Message = require("./Message");
 
 const db = require("./db");
 
@@ -18,6 +19,7 @@ const models = {
   Event,
   Album,
   Photo,
+  Message,
 };
 
 //if a model has associate attribute, create the associations
