@@ -5,6 +5,9 @@ const UserType = gql`
     id: Int!
     username: String!
     email: String!
+    firstName: String!
+    lastName: String!
+    photo: String!
   }
 
   type RegisterResponse {
@@ -14,25 +17,32 @@ const UserType = gql`
   }
   type LoginResponse {
     ok: Boolean!
+    user: User
     token: String
-    refreshToken: String
     errors: [Error!]
   }
-
-  #   type Query {
-  #     me: User!
-  #     allUsers: [User!]!
-  #     hi: String!
-  #     getUser(userId: Int!): User
-  #   }
-  #   type Mutation {
-  #     register(
-  #       username: String!
-  #       email: String!
-  #       password: String!
-  #     ): RegisterResponse!
-  #     login(email: String!, password: String!): LoginResponse
-  #   }
+  type ProfileResponse {
+    user: User!
+    group: Group!
+  }
+  extend type Query {
+    me: User!
+    getProfile: ProfileResponse!
+    # allUsers: [User!]!
+    # hi: String!
+    # getUser(userId: Int!): User
+  }
+  extend type Mutation {
+    register(
+      username: String!
+      email: String!
+      password: String!
+      firstName: String!
+      lastName: String!
+      dateOfBirth: String!
+    ): RegisterResponse!
+    login(email: String!, password: String!): LoginResponse
+  }
 `;
 
 module.exports = UserType;

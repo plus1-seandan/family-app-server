@@ -1,35 +1,57 @@
 const express = require("express");
 const cors = require("cors");
 const { ApolloServer } = require("apollo-server-express");
+const passport = require("passport");
+const bodyParser = require("body-parser");
+const { verify, decode } = require("jsonwebtoken");
+const { apolloUploadExpress } = require("apollo-upload-server");
 require("dotenv").config();
 
 const db = require("./models/db");
 const models = require("./models");
-const UserResolvere = require("./graphql/resolvers/User");
 const schema = require("./graphql");
-const { buildSchema } = require("graphql");
-const BookResolver = require("./graphql/resolvers/Book");
+const setupPassport = require("./config/passport");
+const { getUser } = require("./utils/user");
 
 const main = async () => {
   //set db connection
   //sync database
   await db.sync({
     models,
-    // force: true
+    // force: true,
+    alter: true,
   }); //force syncs database for development
 
   const app = express();
+  //add express middleware
   app.use(cors());
+  app.use(passport.initialize());
+  setupPassport(passport);
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use((req, _, next) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const token = authHeader.split(" ")[1];
+      const data = verify(token, process.env.SECRET_KEY);
+      req.userId = data.userId;
+    } catch (e) {
+      console.log("NOT LOGGED IN ");
+    }
+    next();
+  });
+
+  app.use(express.static("public"));
 
   const apolloServer = new ApolloServer({
     schema,
-    context: ({ req, res }) => ({
-      // req,
-      // res,
-      // redis,
-      // userLoader: createUserLoader(),
-      // updootLoader: createUpdootLoader(),
-    }),
+    context: async ({ req, res }) => {
+      return {
+        models,
+        req,
+        res,
+      };
+    },
   });
 
   apolloServer.applyMiddleware({
