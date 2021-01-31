@@ -14,6 +14,8 @@ Group.associate = (models) => {
     through: models.Member,
     foreignKey: "groupId",
   });
+  Group.hasMany(models.Event);
+  Group.hasMany(models.Album);
 };
 
 module.exports = Group;

@@ -4,6 +4,9 @@ const User = require("./user");
 const Member = require("./Member");
 const Group = require("./group");
 const Relationship = require("./relationship");
+const Event = require("./Event");
+const Album = require("./Album");
+const Photo = require("./Photo");
 
 const db = require("./db");
 
@@ -12,6 +15,9 @@ const models = {
   Member,
   Group,
   Relationship,
+  Event,
+  Album,
+  Photo,
 };
 
 //if a model has associate attribute, create the associations

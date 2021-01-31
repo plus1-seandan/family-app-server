@@ -10,15 +10,31 @@ const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
 
 const formatErrors = require("../../utils/formatErrors");
+const models = require("../../models");
+const { getGroup } = require("../../utils/group");
 require("dotenv").config();
-
-const formatErrors = require("../../utils/formatErrors");
 
 const UserResolver = {
   Query: {
-    // allUsers: (parent, args, { models }) => models.User.findAll(),
+    getProfile: async (parent, args, { req }) => {
+      if (!req.userId) {
+        console.log("userId not found ");
+        return null;
+      }
+      const me = await models.User.findOne(
+        { where: { id: 11 } },
+        { raw: true }
+      );
+
+      const group = await getGroup(11);
+      return {
+        user: me,
+        group,
+      };
+    },
     me: async (parent, args, { req }) => {
       if (!req.userId) {
+        console.log("userId not found ");
         return null;
       }
       const me = await models.User.findOne(
@@ -53,7 +69,6 @@ const UserResolver = {
       }
     },
     register: async (parent, args, { models }) => {
-      console.log("hit");
       try {
         const user = await models.User.create(args);
         return {

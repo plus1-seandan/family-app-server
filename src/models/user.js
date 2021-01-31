@@ -28,6 +28,9 @@ const User = db.define("user", {
       },
     },
   },
+  photo: {
+    type: Sequelize.STRING,
+  },
   firstName: {
     type: Sequelize.STRING,
   },
