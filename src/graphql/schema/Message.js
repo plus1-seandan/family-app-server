@@ -5,18 +5,19 @@ const MessageType = gql`
     id: Int!
     text: String!
     user: User!
+    me: Boolean
   }
 
-  #   type Subscription {
-  #     newChannelMessage(channelId: Int!): Message!
-  #   }
+  type Subscription {
+    newMessage: Message!
+  }
 
   extend type Query {
-    messages(groupId: Int!): [Message!]!
+    messages: [Message!]!
   }
 
   extend type Mutation {
-    createMessage(groupId: Int!, text: String!): Boolean!
+    createMessage(text: String!): Message!
   }
 `;
 

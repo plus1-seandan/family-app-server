@@ -1,10 +1,13 @@
 const express = require("express");
 const cors = require("cors");
-const { ApolloServer } = require("apollo-server-express");
+const { ApolloServer, PubSub } = require("apollo-server-express");
 const passport = require("passport");
+const { execute, subscribe } = require("graphql");
 const bodyParser = require("body-parser");
 const { verify, decode } = require("jsonwebtoken");
 const { apolloUploadExpress } = require("apollo-upload-server");
+const { SubscriptionServer } = require("subscriptions-transport-ws");
+const http = require("http");
 require("dotenv").config();
 
 const db = require("./models/db");
@@ -14,6 +17,7 @@ const setupPassport = require("./config/passport");
 const { getUser } = require("./utils/user");
 
 const main = async () => {
+  PORT = 4000;
   //set db connection
   //sync database
   await db.sync({
@@ -42,14 +46,19 @@ const main = async () => {
   });
 
   app.use(express.static("public"));
+  const pubsub = new PubSub();
 
   const apolloServer = new ApolloServer({
     schema,
+    subscriptions: {
+      onConnect: () => console.log("Connected to websocket"),
+    },
     context: async ({ req, res }) => {
       return {
         models,
         req,
         res,
+        pubsub,
       };
     },
   });
@@ -58,10 +67,36 @@ const main = async () => {
     app,
     cors: false,
   }); //this will create graphql endpoint for us in express
+  const httpServer = http.createServer(app);
+  apolloServer.installSubscriptionHandlers(httpServer);
 
-  app.listen(parseInt(process.env.PORT), () => {
-    console.log(`server started on localhost:${process.env.PORT}`);
+  // app.listen(parseInt(process.env.PORT), () => {
+  //   console.log(`server started on localhost:${process.env.PORT}`);
+  // });
+  httpServer.listen(PORT, () => {
+    console.log(
+      `🚀 Server ready at http://localhost:${PORT}${apolloServer.graphqlPath}`
+    );
+    console.log(
+      `🚀 Subscriptions ready at ws://localhost:${PORT}${apolloServer.subscriptionsPath}`
+    );
   });
+
+  //   const server = createServer(app);
+  //   server.listen(PORT, () => {
+  //     new SubscriptionServer(
+  //       {
+  //         execute,
+  //         subscribe,
+  //         schema,
+  //       },
+  //       {
+  //         server: server,
+  //         path: "/graphql",
+  //       }
+  //     );
+  //     console.log(`server started on localhost:${process.env.PORT}`);
+  //   });
 };
 
 main().catch((err) => {
