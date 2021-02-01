@@ -28,10 +28,9 @@ const UserResolver = {
       // const groupId = await getGroupId(req.userId);
       // console.log({ groupId });
       const group = await getGroup(req.userId);
-      console.log({ group });
       const res = {
-        user: me.dataValues,
-        group: group.dataValues,
+        user: me,
+        group: group,
       };
       return res;
     },

@@ -2,6 +2,7 @@
 // import { withFilter, PubSub } from "apollo-server-express";
 // import pubsub from "../../pubsub";
 
+const { withFilter } = require("apollo-server");
 const { getGroupId } = require("../../utils/group");
 
 const MessageResolver = {
@@ -20,9 +21,15 @@ const MessageResolver = {
   Subscription: {
     newMessage: {
       // Additional event labels can be passed to asyncIterator creation
-      subscribe: (parent, args, context) => {
-        return context.pubsub.asyncIterator("NEW_MESSAGE");
-      },
+      subscribe: withFilter(
+        (_, __, { pubsub }) => pubsub.asyncIterator("NEW_MESSAGE"),
+        async (payload, args) => {
+          console.log({ payload });
+          const groupId = await getGroupId(payload.newMessage.userId);
+          console.log({ groupId, args });
+          return groupId === args.groupId;
+        }
+      ),
     },
   },
 

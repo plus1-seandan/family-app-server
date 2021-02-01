@@ -12,10 +12,7 @@ const getGroup = async (userId) => {
   });
 
   const members = await Promise.all(promises);
-  return {
-    ...group,
-    members,
-  };
+  return { id: 1, groupName: "My Family", members };
 };
 
 const getGroupId = async (userId) => {

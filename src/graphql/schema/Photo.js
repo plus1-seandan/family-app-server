@@ -11,9 +11,10 @@ const PhotoType = gql`
     photo: Photo
     errors: [Error!]
   }
-  
+
   extend type Mutation {
     postPhoto(albumId: Int!, url: String!): PostPhotoResponse!
+    deletePhoto(photoId: Int!): Boolean
   }
 `;
 

@@ -1,11 +1,39 @@
 const models = require("../../models");
 const formatErrors = require("../../utils/formatErrors");
+const fs = require("fs");
+const path = require("path");
 
 const PhotoResolver = {
   Query: {},
   Mutation: {
-    // login: (parent, { email, password }, { models, req, res }) =>
-    //   tryLogin(email, password, models, SECRET, SECRET2),
+    deletePhoto: async (parent, args, { models }) => {
+      try {
+        const photo = await models.Photo.findOne({
+          where: { id: args.photoId },
+        });
+        const photoUrl = photo.url.split("/");
+        const fileName = photoUrl[photoUrl.length - 1];
+        // console.log({ path });
+        console.log(photoUrl[photoUrl.length - 1]);
+        const pathName = path.join(
+          __dirname,
+          `/../../../public/images/${fileName}`
+        );
+        console.log({ pathName });
+        fs.unlink(pathName, (err) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+        });
+        //remove the file from url
+        await models.Photo.destroy({ where: { id: args.photoId } });
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    },
     postPhoto: async (parent, args, { models }) => {
       try {
         const photo = await models.Photo.create(args);
