@@ -3,6 +3,7 @@ const { gql } = require("apollo-server-express");
 const GroupType = gql`
   type Group {
     id: Int!
+    groupName: String!
     members: [User!]
   }
 

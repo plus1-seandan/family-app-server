@@ -28,14 +28,8 @@ const MessageResolver = {
 
   Message: {
     user: async (parent, args, context) => {
-      let userId;
-      if (!context.req) {
-        userId = context.userId;
-      } else {
-        userId = context.req.userId;
-      }
       const sender = await context.models.User.findOne(
-        { logging: false, where: { id: userId } },
+        { logging: false, where: { id: parent.userId } },
         { raw: true }
       );
       return sender;

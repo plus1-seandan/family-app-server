@@ -11,7 +11,7 @@ const { sign } = require("jsonwebtoken");
 
 const formatErrors = require("../../utils/formatErrors");
 const models = require("../../models");
-const { getGroup } = require("../../utils/group");
+const { getGroup, getGroupId } = require("../../utils/group");
 require("dotenv").config();
 
 const UserResolver = {
@@ -22,15 +22,18 @@ const UserResolver = {
         return null;
       }
       const me = await models.User.findOne(
-        { where: { id: 11 } },
+        { where: { id: req.userId } },
         { raw: true }
       );
-
-      const group = await getGroup(11);
-      return {
-        user: me,
-        group,
+      // const groupId = await getGroupId(req.userId);
+      // console.log({ groupId });
+      const group = await getGroup(req.userId);
+      console.log({ group });
+      const res = {
+        user: me.dataValues,
+        group: group.dataValues,
       };
+      return res;
     },
     me: async (parent, args, { req }) => {
       if (!req.userId) {
