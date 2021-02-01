@@ -20,33 +20,41 @@ const MessageResolver = {
   Subscription: {
     newMessage: {
       // Additional event labels can be passed to asyncIterator creation
-      subscribe: (_, __, { pubsub }) => pubsub.asyncIterator("NEW_MESSAGE"),
+      subscribe: (parent, args, context) => {
+        return context.pubsub.asyncIterator("NEW_MESSAGE");
+      },
     },
   },
 
   Message: {
-    user: async ({ user, userId }, args, { models }) => {
-      let me;
-      if (user) {
-        me = user;
+    user: async (parent, args, context) => {
+      let userId;
+      if (!context.req) {
+        userId = context.userId;
       } else {
-        me = await models.User.findOne(
-          { logging: false, where: { id: userId } },
-          { raw: true }
-        );
+        userId = context.req.userId;
       }
-      return me;
+      const sender = await context.models.User.findOne(
+        { logging: false, where: { id: userId } },
+        { raw: true }
+      );
+      return sender;
     },
-    me: async (parent, args, { req, models }) => {
-      return parent.userId === req.userId;
+    me: async (parent, args, context) => {
+      let userId;
+      if (!context.req) {
+        userId = context.userId;
+      } else {
+        userId = context.req.userId;
+      }
+      return parent.userId === userId;
     },
   },
 
   Query: {
-    messages: async (parent, args, { models }) => {
-      const groupId = await getGroupId(12);
-      const messages = await models.Message.findAll(
-        { where: { groupId } },
+    messages: async (parent, args, context) => {
+      const messages = await context.models.Message.findAll(
+        { where: { groupId: args.groupId } },
         { order: [["createdAt", "ASC"]] },
         { raw: true }
       );
@@ -56,10 +64,9 @@ const MessageResolver = {
   Mutation: {
     createMessage: async (parent, args, { req, models, pubsub }) => {
       try {
-        pubsub.publish("NEW_MESSAGE", { newMessage: args });
         const groupId = await getGroupId(req.userId);
         const me = await models.User.findOne(
-          { where: { id: req.userId } },
+          { where: { id: args.userId } },
           { raw: true }
         );
 
@@ -68,7 +75,7 @@ const MessageResolver = {
           userId: req.userId,
           groupId,
         });
-
+        pubsub.publish("NEW_MESSAGE", { newMessage: args });
         return message;
       } catch (err) {
         console.log(err);

@@ -16,7 +16,6 @@ const FileResolver = {
   Mutation: {
     async uploadFile(parent, { file }) {
       const { stream, filename, mimetype, encoding } = await file;
-      console.log({ file });
       const pathName = path.join(
         __dirname,
         `/../../../public/images/${filename}`

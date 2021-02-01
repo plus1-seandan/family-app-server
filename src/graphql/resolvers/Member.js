@@ -20,7 +20,6 @@ const MemberResolver = {
           groupId: args.groupId,
           userId: args.userId,
         });
-        console.log({ member: member.dataValues });
         const res = {
           ok: true,
           member: {

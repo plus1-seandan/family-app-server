@@ -13,11 +13,11 @@ const MessageType = gql`
   }
 
   extend type Query {
-    messages: [Message!]!
+    messages(groupId: Int!, userId: Int!): [Message!]!
   }
 
   extend type Mutation {
-    createMessage(text: String!): Message!
+    createMessage(userId: Int!, text: String!): Message!
   }
 `;
 

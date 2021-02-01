@@ -5,7 +5,6 @@ const getGroup = async (userId) => {
   const allMemberIds = await models.Member.findAll({
     where: { groupId: me.groupId },
   });
-  console.log({ allMemberIds });
 
   const promises = allMemberIds.map(async (member) => {
     return await models.User.findOne({ where: { id: member.userId } });

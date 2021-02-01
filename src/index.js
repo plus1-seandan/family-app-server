@@ -51,15 +51,25 @@ const main = async () => {
   const apolloServer = new ApolloServer({
     schema,
     subscriptions: {
-      onConnect: () => console.log("Connected to websocket"),
+      onConnect: async (connectionParams, webSocket) => {
+        const authHeader = connectionParams.headers.Authorization;
+        const token = authHeader.split(" ")[1];
+        const data = verify(token, process.env.SECRET_KEY);
+        const userId = data.userId;
+        return { pubsub, models, userId };
+      },
     },
-    context: async ({ req, res }) => {
-      return {
-        models,
-        req,
-        res,
-        pubsub,
-      };
+    context: async ({ req, res, connection }) => {
+      if (connection) {
+        return connection.context;
+      } else {
+        return {
+          models,
+          req,
+          res,
+          pubsub,
+        };
+      }
     },
   });
 

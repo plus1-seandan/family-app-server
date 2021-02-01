@@ -30,7 +30,6 @@ const AlbumResolver = {
 
     getAlbum: async (parent, args, { models, req }) => {
       const albumId = args.albumId;
-      console.log({ albumId });
       const album = await models.Album.findOne({
         where: {
           id: albumId,
