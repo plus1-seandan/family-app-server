@@ -13,7 +13,7 @@ Sequelize <br/>
 
 ![](family360.gif)
 
-Note: This is in combination with the backend project ([repo](https://github.com/seanysdan/family-app-client)).
+Note: This is in combination with the frontend project ([repo](https://github.com/seanysdan/family-app-client)).
 
 ## Running the project
 
