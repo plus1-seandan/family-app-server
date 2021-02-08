@@ -3,7 +3,6 @@ const models = require("../models");
 const getGroup = async (userId) => {
   const me = await models.Member.findOne({ where: { userId } });
   const group = await models.Group.findOne({ where: { id: me.groupId } });
-  console.log({ group });
   const allMemberIds = await models.Member.findAll({
     where: { groupId: me.groupId },
   });

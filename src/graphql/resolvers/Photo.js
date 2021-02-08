@@ -14,12 +14,11 @@ const PhotoResolver = {
         const photoUrl = photo.url.split("/");
         const fileName = photoUrl[photoUrl.length - 1];
         // console.log({ path });
-        console.log(photoUrl[photoUrl.length - 1]);
+        photoUrl[photoUrl.length - 1];
         const pathName = path.join(
           __dirname,
           `/../../../public/images/${fileName}`
         );
-        console.log({ pathName });
         fs.unlink(pathName, (err) => {
           if (err) {
             console.log(err);

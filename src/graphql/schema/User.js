@@ -41,7 +41,14 @@ const UserType = gql`
       lastName: String!
       dateOfBirth: String!
     ): RegisterResponse!
-    login(email: String!, password: String!): LoginResponse
+
+    login(email: String!, password: String!): LoginResponse!
+
+    updateUser(
+      username: String!
+      firstName: String!
+      lastName: String!
+    ): Boolean!
   }
 `;
 

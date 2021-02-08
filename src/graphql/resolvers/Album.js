@@ -69,6 +69,18 @@ const AlbumResolver = {
         };
       }
     },
+    deleteAlbum: async (parent, args, { models, req }) => {
+      try {
+        //delete all photos
+        await models.Photo.destroy({ where: { albumId: args.albumId } });
+        await models.Album.destroy({ where: { id: args.albumId } });
+        //then delete all record
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
+    },
   },
 };
 

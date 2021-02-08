@@ -24,9 +24,7 @@ const MessageResolver = {
       subscribe: withFilter(
         (_, __, { pubsub }) => pubsub.asyncIterator("NEW_MESSAGE"),
         async (payload, args) => {
-          console.log({ payload });
           const groupId = await getGroupId(payload.newMessage.userId);
-          console.log({ groupId, args });
           return groupId === args.groupId;
         }
       ),

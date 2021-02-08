@@ -21,6 +21,7 @@ const AlbumType = gql`
   }
   extend type Mutation {
     createAlbum(albumName: String!): CreateAlbumResponse!
+    deleteAlbum(albumId: Int!): Boolean!
   }
 `;
 

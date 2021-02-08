@@ -8,10 +8,12 @@
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
+const { QueryTypes } = require("sequelize");
 
 const formatErrors = require("../../utils/formatErrors");
 const models = require("../../models");
 const { getGroup, getGroupId } = require("../../utils/group");
+const db = require("../../models/db");
 require("dotenv").config();
 
 const UserResolver = {
@@ -83,6 +85,21 @@ const UserResolver = {
           ok: false,
           errors: formatErrors(err),
         };
+      }
+    },
+    updateUser: async (parent, args, { req, models }) => {
+      try {
+        console.log({ args });
+        await db.query(
+          `update users set first_name='${args.firstName}', last_name='${args.lastName}', username='${args.username}' where id='${req.userId}'`,
+          {
+            type: QueryTypes.UPDATE,
+          }
+        );
+        return true;
+      } catch (e) {
+        console.log(e);
+        return false;
       }
     },
   },
